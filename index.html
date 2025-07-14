@@ -213,7 +213,7 @@
     .question-section,
     .result-section {
       padding: 1.5rem;
-      width: 100%
+      width: 100%;
       max-width: 480px;
       margin: 0 auto;
     }
@@ -629,7 +629,7 @@
                       body: JSON.stringify(payload)
                   });
 
-                  window.location.href = `https://www.mimmiturva.fi/indeksi/${index}`;
+                  window.top.location.href = `https://mimmiturva.framer.website/indeksi/`;
               } catch (err) {
                   console.error("Virhe tietojen lähetyksessä:", err);
                   alert("Tietojen lähetyksessä tapahtui virhe. Yritä uudelleen myöhemmin.");
