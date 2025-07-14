@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mimmiturva-indeksi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+
+  <style>
+
+    :root {
+      /* Fontit */
+      --font-heading: 'Oswald', sans-serif;
+      --font-body: 'Inter', sans-serif;
+
+      /* Värit */
+      --color-black: #1A1919;
+      --color-white: #E6E5E3;
+      --color-red: #940500;
+      --color-black-15: rgba(26, 25, 25, 0.15);
+      --color-black-35: rgba(26, 25, 25, 0.35);
+
+      /* Spacing & ulkoasu */
+      --padding-button: 1.25rem 2.5rem;
+      --padding-view: clamp(2rem, 4vw, 4rem);
+      --gap-small: 1.5rem;
+      --gap-medium: 2rem;
+      --gap-big: 4rem;
+      --border-radius-round: 2.5rem;
+    }
+
+    /* Layout: runko */
+    body {
+      font-family: var(--font-body);
+      margin: 0;
+      padding: 0;
+      background-color: var(--color-white);
+      color: var(--color-black);
+    }
+
+    /* Kortti */
+    .card {
+      background-color: var(--color-white);
+      padding: 2rem 4rem;
+      border-radius: 1rem;
+      border: 1px solid var(--color-black);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      box-sizing: border-box;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      margin: 0 auto;
+    }
+
+    /* Fade-in */
+    .fade-in {
+      animation: fadeIn 0.4s ease both;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Radiopainikkeet */
+    input[type="radio"] {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--color-black);
+      border-radius: 50%;
+      margin-right: 8px;
+      position: relative;
+      cursor: pointer;
+      transition: box-shadow 0.15s ease, background-color 0.15s ease;
+    }
+    input[type="radio"]:hover {
+      box-shadow: 0 0 0 4px var(--color-black-15);
+      background-color: var(--color-black-15);
+    }
+    input[type="radio"]:checked {
+      background-color: var(--color-black);
+      box-shadow: 0 0 0 2px var(--color-white) inset;
+    }
+
+    /* Napit */
+    button {
+      width: fit-content;
+      border: 1px solid transparent;
+      font-weight: 700;
+      display: flex;
+      cursor: pointer;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: var(--padding-button);
+      font-family: var(--font-body);
+      font-size: clamp(1.1rem, 1.5vw, 1.3rem);
+      background: var(--color-black);
+      color: var(--color-white);
+      border-radius: var(--border-radius-round);
+      gap: var(--gap-small);
+      line-height: 2rem;
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 2px 6px var(--color-black-15);
+      margin: 1rem auto;
+    }
+    button:hover {
+      background-color: var(--color-red);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px var(--color-black-35);
+    }
+    button:active {
+      transform: scale(0.97);
+    }
+
+    /* Takaisin-nappi */
+    button.secondary,
+    button.back-btn {
+      background-color: var(--color-white);
+      color: var(--color-black);
+      border: 2px solid var(--color-black);
+      box-shadow: none;
+    }
+    button.secondary:hover,
+    button.back-btn:hover {
+      background-color: var(--color-black);
+      color: var(--color-white);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+    button.secondary:active,
+    button.back-btn:active {
+      transform: scale(0.97);
+    }
+    button#start-btn {
+      display: block;
+    }
+    button.back-btn,
+    button.next-btn {
+      white-space: nowrap;
+    }
+
+    /* Button group */
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+      gap: var(--gap-small);
+      max-width: 400px;
+      margin: 2rem auto 0 auto;
+    }
+    .button-group:has(:only-child) {
+      justify-content: flex-end;
+    }
+
+    /* Typografia */
+    h1, h2 {
+      font-family: var(--font-heading);
+      text-transform: uppercase;
+      font-weight: 400;
+      letter-spacing: 0.015em;
+      text-align: center;
+    }
+    h1 {
+      font-size: clamp(1.5rem, 2vw, 2rem);
+      color: var(--color-red);
+    }
+    h2 {
+      font-size: clamp(1.38rem, 3.45vw, 2.42rem);
+      font-weight: 400;
+      border-bottom: 3px solid var(--color-red);
+      padding-bottom: 0.5rem;
+      margin: 0 auto 1.5rem;
+      width: fit-content;
+      text-align: center;
+    }
+    h3 {
+      font-family: var(--font-body);
+      text-align: center;
+      font-weight: 700;
+      font-size: clamp(1.2rem, 1.5vw, 1.4rem);
+    }
+    b, strong {
+      font-weight: 700;
+      font-family: var(--font-body);
+    }
+    i, em {
+      font-style: italic;
+      font-family: var(--font-body);
+    }
+    p {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 1.1rem;
+      line-height: 1.8rem;
+      text-align: center;
+    }
+
+    /* Layout-osiot */
+    .section,
+    .question-section,
+    .result-section {
+      padding: 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .question-section label:first-of-type {
+      margin-top: 0.75rem; 
+      display: inline-block; 
+    }
+
+
+    /* Virheilmoitus */
+    .error-msg {
+      color: var(--color-red);
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      text-align: center;
+      display: none;
+    }
+    .error-msg.active {
+      display: block;
+    }
+
+    /* Lomakekentät */
+    input[type="text"],
+    input[type="email"] {
+      width: 100%;
+      padding: 0.75rem 12rem;
+      font-size: 1.1rem;
+      border: 2px solid transparent;
+      border-radius: 2rem;
+      background-color: #ddd; 
+      color: var(--color-black);
+      font-family: var(--font-body);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      margin-bottom: 1rem;
+      box-sizing: border-box;
+    }
+
+    /* Aktiivinen tila (kun kenttä on valittuna) */
+    input[type="text"]:focus,
+    input[type="email"]:focus {
+      border-color: var(--color-red);
+      outline: none;
+      background-color: #fff;
+    }
+
+    /* Placeholder-teksti harmaaksi */
+    input::placeholder {
+      color: #666;
+    }
+
+</style>
+</head>
+<body>
+
+<!-- Aloitussivu -->
+<section id="start-section" class="section">
+  <div class="card">
+    <h2>Kuinka turvassa oikeasti olet?</h2>
+    <h3>Tee 2 minuutin testi ja selvitä, oletko valmis toimimaan uhkaavassa tilanteessa &mdash; vai luotatko vain tuuriin.</h3>
+    <p><b>Mimmiturvaindeksi on nopea ja ajatuksia herättävä testi</b>, joka paljastaa turvallisuustaitojesi nykytilan &mdash; ja näyttää, oletko valmis toimimaan, jos jotain oikeasti tapahtuisi.
+</p>
+    <p> Saat henkilökohtaisen turvaindeksisi värikoodattuna ja ymmärrät paremmin mitä voi tehdä turvallisuutesi parantamiseksi.
+</p>
+    <p> Aloita testi nyt painamalla alla olevaa nappulaa.</p>
+<button id="start-btn">Haluan selvittää turvatasoni!</button>
+</div>
+</section>
+
+<!-- Kysymys 1 -->
+<section id="question-1" class="question-section" style="display: none;">
+  <div class="card">
+    <h2>1. Entä jos jotain tapahtuisi?</h2>
+    <i>Miten suhtaudut mahdollisiin turvallisuusuhkiin omassa tai läheistesi elämässä?</i>
+    <label style="margin-top: 0.75rem; display: inline-block;"></label>
+    <form action="#" onsubmit="return false;">
+      <label><input type="radio" name="q1" value="2"> Ajattelen, että elämä kantaa, enkä juuri mieti uhkia ennalta. </label><br>
+      <label><input type="radio" name="q1" value="3"> Luotan siihen, että jos jotain tapahtuisi, selviäisimme kyllä siinä hetkessä. </label><br>
+      <label><input type="radio" name="q1" value="1"> Olen pohtinut mahdollisia uhkia ja tehnyt tietoisia valintoja niiden varalle. </label><br>
+    </form>
+    <button class="next-btn">Seuraava →</button>
+    <p class="error-msg">Valitse yksi vastaus ennen kuin jatkat.</p>
+  </div>
+</section>
+
+<!-- Kysymys 2 -->
+<section id="question-2" class="question-section" style="display: none;">
+  <div class="card">
+    <h2>2. Voiko tieto tehdä sinusta vahvemman?</h2>
+    <i>Miten koet turvallisuustiedon merkityksen arjessasi?</i>
+    <form action="#" onsubmit="return false;">
+      <label><input type="radio" name="q2" value="3"> Ajattelen, että turvallisuus kuuluu viranomaisten vastuulle, eikä minun tarvitse perehtyä siihen sen syvemmin. </label><br>
+      <label><input type="radio" name="q2" value="2"> Koen, että liiallinen tieto voi aiheuttaa turhaa huolta tai ahdistusta. </label><br>
+      <label><input type="radio" name="q2" value="1"> Uskon, että tieto auttaa tekemään parempia päätöksiä ja ennakoimaan tilanteita. </label><br>
+    </form>
+    <div class="button-group">
+      <button class="back-btn">← Takaisin</button>
+      <button class="next-btn">Seuraava →</button>
+    </div>
+    <p class="error-msg">Valitse yksi vastaus ennen kuin jatkat.</p>
+  </div>
+</section>
+
+<!-- Kysymys 3 -->
+<section id="question-3" class="question-section" style="display: none;">
+  <div class="card">
+    <h2>3. Miten elinympäristösi vaikuttaa turvallisuuteesi?</h2>
+    <i>Miten arvioit ympäristösi vaikutusta turvallisuuteesi?</i>
+    <form action="#" onsubmit="return false;">
+      <label><input type="radio" name="q3" value="2"> Tunnen oloni useimmiten turvalliseksi, enkä juuri mieti mahdollisia riskejä. </label><br>
+      <label><input type="radio" name="q3" value="1"> Tiedostan, että tietyt paikat tai tilanteet voivat vaatia erityistä valppautta. </label><br>
+      <label><input type="radio" name="q3" value="3"> Turvallisuudentunteeni vaihtelee uutisoinnin, ei ympäristön mukaan. </label><br>
+    </form>
+    <div class="button-group">
+      <button class="back-btn">← Takaisin</button>
+      <button class="next-btn">Seuraava →</button>
+    </div>
+    <p class="error-msg">Valitse yksi vastaus ennen kuin jatkat.</p>
+  </div>
+</section>
+
+<!-- Kysymys 4 -->
+<section id="question-4" class="question-section" style="display: none;">
+  <div class="card"> 
+    <h2>4. Koetko pelkoa?</h2>
+    <i>Millainen suhde sinulla on pelon tunteeseen ja mahdollisiin uhkiin?</i>
+    <form action="#" onsubmit="return false;">
+      <label><input type="radio" name="q4" value="2"> Tunnen vähän pelkoa ja tunnistan riskejä, jotka voisivat uhata turvallisuuttani tai läheisiäni. </label><br>
+      <label><input type="radio" name="q4" value="3"> En tunne pelkoa enkä koe olevani vaarassa. </label><br>
+      <label><input type="radio" name="q4" value="1"> Tunnen pelkoa, mutta en osaa nimetä syytä tai uhkaa. </label><br>
+    </form>
+    <div class="button-group">
+      <button class="back-btn">← Takaisin</button>
+      <button class="next-btn">Seuraava →</button>
+    </div>
+    <p class="error-msg">Valitse yksi vastaus ennen kuin jatkat.</p>
+  </div>
+</section>
+
+<!-- Kysymys 5 -->
+<section id="question-5" class="question-section" style="display: none;">
+  <div class="card">
+    <h2>5. Panostatko turvallisuuteen?</h2>
+    <i>Miten suhtaudut siihen, että turvallisuus vaatii vähän aikaa, rahaa tai muita resursseja?</i>
+    <form action="#" onsubmit="return false;">
+      <label><input type="radio" name="q5" value="2"> Tuntuu vaikealta käyttää resursseja johonkin, mikä ei ehkä koskaan tapahdu. </label><br>
+      <label><input type="radio" name="q5" value="3"> Toimin vasta sitten, jos jokin tilanne oikeasti vaatii sitä. </label><br>
+      <label><input type="radio" name="q5" value="1"> Näen turvallisuuteen panostamisen järkevänä ennakointina. </label><br>
+    </form>
+    <div class="button-group">
+      <button class="back-btn">← Takaisin</button>
+      <button class="next-btn">Seuraava →</button>
+    </div>
+    <p class="error-msg">Valitse yksi vastaus ennen kuin jatkat.</p>
+  </div>
+</section>
+
+<!-- Kysymys 6 -->
+<section id="question-6" class="question-section" style="display: none;">
+  <div class="card">
+    <h2>6. Kannatko vastuuta myös muiden turvallisuudesta?</h2>
+    <i>Millainen rooli sinulla on läheistesi turvallisuuden tukemisessa?</i>
+    <form action="#" onsubmit="return false;">
+      <label><input type="radio" name="q6" value="2"> Uskon, että jokainen vastaa itse omasta turvallisuudestaan. </label><br>
+      <label><input type="radio" name="q6" value="1"> Kannustan ja tuen heitä kehittämään omaa osaamistaan ja varautumistaan. </label><br>
+      <label><input type="radio" name="q6" value="3"> Yritän pitää heidät suojassa välttelemällä maalaamasta piruja seinille. </label><br>
+    </form>
+    <div class="button-group">
+      <button class="back-btn">← Takaisin</button>
+      <button class="next-btn">Seuraava →</button>
+    </div>
+    <p class="error-msg">Valitse yksi vastaus ennen kuin jatkat.</p>
+  </div>
+</section>
+
+<!-- Suostumus- ja yhteystiedot -sivu -->
+<section id="consent-section" class="section" style="display: none;">
+  <div class="card">
+  <h2>Melkein valmis!</h2>
+  <p>Anna sähköpostiosoitteesi ja nimesi, niin saat Mimmiturvaindeksisi välittömästi näkyviin ja <b>ilmaisen Mimmiturvaoppaan käyttöösi!</b></p>
+
+  <form id="consent-form" onsubmit="return false;">
+    <label for="firstname">Etunimi:</label><br>
+    <input type="text" id="firstname" name="firstname" required style="width: 100%; padding: 0.4rem; margin-bottom: 1rem;"><br>
+
+    <label for="lastname">Sukunimi:</label><br>
+    <input type="text" id="lastname" name="lastname" required style="width: 100%; padding: 0.4rem; margin-bottom: 1rem;"><br>
+
+    <label for="email">Sähköposti:</label><br>
+    <input type="email" id="email" name="email" required style="width: 100%; padding: 0.4rem; margin-bottom: 1rem;"><br>
+
+    <label>
+      <input type="checkbox" id="consent-checkbox" required>
+      Hyväksyn, että minulle lähetetään sähköpostitse ilmainen Mimmiturvasopas ja turvallisuuttasi parantavia uutisia. Voin peruuttaa tilauksen koska tahansa.
+    </label>
+
+    <p id="consent-error" class="error-msg">Täytä kaikki kentät ja hyväksy suostumus ennen jatkamista.</p>
+
+    <div class="button-group">
+      <button class="back-btn">← Takaisin</button>
+      <button id="final-submit-btn">Lähetä</button>
+    </div>
+  </form>
+  </div>
+</section>
+
+<script>
+
+    let currentQuestion = 0;
+
+    function showSection(index) {
+        document.getElementById("start-section").style.display = "none";
+        const questionSections = document.querySelectorAll(".question-section");
+        const consentSection = document.getElementById("consent-section");
+
+        questionSections.forEach(section => {
+            section.style.display = "none";
+            section.classList.remove("fade-in");
+        });
+
+        if (consentSection) {
+            consentSection.style.display = "none";
+            consentSection.classList.remove("fade-in");
+        }
+
+        let targetSection = null;
+        if (index === 0) {
+            targetSection = document.getElementById("start-section");
+        } else if (index >= 1 && index <= 6) {
+            targetSection = questionSections[index - 1];
+        } else if (index === 7) {
+            targetSection = consentSection;
+        }
+
+        if (targetSection) {
+            targetSection.style.display = "block";
+            requestAnimationFrame(() => {
+                targetSection.classList.add("fade-in");
+            });
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const startButton = document.getElementById("start-btn");
+        if (startButton) {
+            startButton.addEventListener("click", () => {
+                currentQuestion = 1; 
+                showSection(currentQuestion);
+            });
+        } else {
+            console.error("Virhe: Aloitusnappia (#start-btn) ei löydy.");
+        }
+
+        document.querySelectorAll('.back-btn').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                if (currentQuestion > 1) { 
+                    currentQuestion--;
+                    showSection(currentQuestion);
+                } else if (currentQuestion === 1) { 
+                    currentQuestion = 0;
+                    showSection(currentQuestion);
+                }
+            });
+        });
+
+        document.querySelectorAll('.next-btn').forEach((btn, idx) => {
+            btn.addEventListener('click', () => {
+                const questionNumber = currentQuestion; 
+                const currentSection = document.getElementById(`question-${questionNumber}`);
+                if (!currentSection) {
+                    console.error(`Virhe: Kysymysosioa #question-${questionNumber} ei löydy.`);
+                    return;
+                }
+                const radios = currentSection.querySelectorAll(`input[name="q${questionNumber}"]`);
+                const errorMsg = currentSection.querySelector(".error-msg");
+
+                let answered = false;
+                radios.forEach(radio => {
+                    if (radio.checked) answered = true;
+                });
+
+                if (!answered) {
+                    if (errorMsg) {
+                        errorMsg.classList.add("active");
+                    }
+                    return;
+                } else {
+                    if (errorMsg) {
+                        errorMsg.classList.remove("active");
+                    }
+                    currentQuestion++;
+                    showSection(currentQuestion);
+                }
+            });
+        });
+
+
+        const finalSubmitQuestionBtn = document.getElementById("final-submit");
+        if (finalSubmitQuestionBtn) {
+            finalSubmitQuestionBtn.addEventListener("click", function () {
+                const currentSection = document.getElementById(`question-6`);
+                if (!currentSection) {
+                    console.error("Virhe: Kysymysosioa #question-6 ei löydy.");
+                    return;
+                }
+                const radios = currentSection.querySelectorAll(`input[name="q6"]`);
+                const errorMsg = currentSection.querySelector(".error-msg");
+
+                let answered = false;
+                radios.forEach(radio => {
+                    if (radio.checked) answered = true;
+                });
+
+                if (!answered) {
+                    if (errorMsg) {
+                        errorMsg.classList.add("active");
+                    }
+                    return;
+                } else {
+                    if (errorMsg) {
+                        errorMsg.classList.remove("active");
+                    }
+                    currentQuestion++; 
+                    showSection(currentQuestion);
+                }
+            });
+        } else {
+            console.warn("Varoitus: Lähetä-nappia (#final-submit) ei löydy kysymysten lopusta.");
+        }
+
+
+        const finalSubmitConsentBtn = document.getElementById("final-submit-btn");
+        if (finalSubmitConsentBtn) {
+            finalSubmitConsentBtn.addEventListener("click", async function (event) {
+              event.preventDefault(); 
+              
+              const firstnameInput = document.getElementById("firstname");
+              const lastnameInput = document.getElementById("lastname");
+              const emailInput = document.getElementById("email");
+              const consentCheckbox = document.getElementById("consent-checkbox");
+              const consentErrorMsg = document.getElementById("consent-error");
+
+              if (!firstnameInput || !lastnameInput || !emailInput || !consentCheckbox || !consentErrorMsg) {
+                  console.error("Virhe: Yhteystietolomakkeen elementtejä puuttuu.");
+                  return;
+              }
+
+              const firstname = firstnameInput.value.trim();
+              const lastname = lastnameInput.value.trim();
+              const email = emailInput.value.trim();
+              const consentChecked = consentCheckbox.checked;
+
+              if (!firstname || !lastname || !email || !consentChecked) {
+                  consentErrorMsg.classList.add("active");
+                  return;
+              } else {
+                  consentErrorMsg.classList.remove("active");
+              }
+
+              const pointsMap = { 
+                q1: { "2": 100, "3": 75, "1": 0 },
+                q2: { "3": 100, "2": 100, "1": 0 },
+                q3: { "2": 100, "1": 0, "3": 100 },
+                q4: { "2": 25, "3": 75, "1": 100 },
+                q5: { "2": 100, "3": 75, "1": 0 },
+                q6: { "2": 100, "1": 0, "3": 100 },
+              };
+
+              let totalPoints = 0;
+              const answers = [];
+
+              for (let i = 1; i <= 6; i++) {
+                  const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                  if (selected) {
+                      const val = selected.value;
+                      totalPoints += pointsMap[`q${i}`][val];
+                      answers.push({
+                          question: `q${i}`,
+                          answerValue: val,
+                          answerText: selected.parentElement.textContent.trim()
+                      });
+                  }
+              }
+
+              let index = 1; 
+              if (totalPoints >= 131 && totalPoints <= 200) index = 2;
+              else if (totalPoints >= 201 && totalPoints <= 400) index = 3;
+              else if (totalPoints >= 401) index = 4;
+
+              const payload = {
+                  firstname,
+                  lastname,
+                  email,
+                  totalPoints,
+                  index,
+                  answers
+              };
+
+              try {
+                  await fetch("https://mimmiturva-fn.azurewebsites.net/api/submitMimmiturva?code=qncY77dATprCZTGSrryvEftJ0Hv_ORiyn4KCFKw9Urh-AzFuKc0HiQ==", {
+                      method: "POST",
+                      headers: {
+                          "Content-Type": "application/json"
+                      },
+                      body: JSON.stringify(payload)
+                  });
+
+                  window.location.href = `https://www.mimmiturva.fi/indeksi/${index}`;
+              } catch (err) {
+                  console.error("Virhe tietojen lähetyksessä:", err);
+                  alert("Tietojen lähetyksessä tapahtui virhe. Yritä uudelleen myöhemmin.");
+              }
+          });
+
+        } else {
+            console.warn("Varoitus: Lopullista lähetä-nappia (#final-submit-btn) ei löydy.");
+        }
+
+        showSection(0);
+    });
+</script>
+
+</body>
+</html>
