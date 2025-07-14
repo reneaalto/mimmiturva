@@ -242,11 +242,12 @@
       width: 100%;
       padding: 0.75rem 1.25rem;
       font-size: 1.1rem;
-      border: 2px solid transparent;
+      border: 2px solid rgba(148, 5, 0, 0.7); 
       border-radius: 2rem;
-      background-color: transparent; 
+      background-color: rgba(255, 255, 255, 0.10); 
       color: var(--color-black);
       font-family: var(--font-body);
+      backdrop-filter: blur(3px); 
       transition: border-color 0.2s ease, box-shadow 0.2s ease;
       margin-bottom: 1rem;
       box-sizing: border-box;
@@ -258,6 +259,7 @@
       border-color: var(--color-red);
       outline: none;
       background-color: #fff;
+      box-shadow: 0 0 0 3px rgba(148, 5, 0, 0.3);
     }
 
     /* Placeholder-teksti harmaaksi */
