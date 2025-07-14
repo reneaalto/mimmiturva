@@ -629,7 +629,7 @@
                       body: JSON.stringify(payload)
                   });
 
-                  window.top.location.href = `https://mimmiturva.framer.website/indeksi/`;
+                  window.top.location.href = `https://mimmiturva.framer.website/indeksi/${index}`;
               } catch (err) {
                   console.error("Virhe tietojen lähetyksessä:", err);
                   alert("Tietojen lähetyksessä tapahtui virhe. Yritä uudelleen myöhemmin.");
