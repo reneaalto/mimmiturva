@@ -272,6 +272,44 @@
       box-sizing: border-box;
     }
 
+    /* Spinner-ylilaatikko */
+    #loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: transparent; /* Pyyntösi mukaisesti transparent */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      backdrop-filter: blur(4px);
+      transition: opacity 0.3s ease-in-out; /* Smooth fade in/out */
+      opacity: 0; /* Hidden by default */
+      pointer-events: none; /* Allows clicks through when hidden */
+    }
+
+    #loading-overlay.visible {
+      opacity: 1;
+      pointer-events: auto; /* Blocks clicks when visible */
+    }
+
+    /* Spinner-animaatio */
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 6px solid #ccc;
+      border-top: 6px solid #e60023; /* Mimmiturva punainen */
+      border-radius: 50%;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      0%   { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
 
 </style>
 </head>
@@ -580,6 +618,9 @@
                   consentErrorMsg.classList.remove("active");
               }
 
+              // Näytä spinneri fade-in-animaatiolla
+              document.getElementById("loading-overlay").classList.add("visible");
+
               const pointsMap = { 
                 q1: { "2": 100, "3": 75, "1": 0 },
                 q2: { "3": 100, "2": 100, "1": 0 },
@@ -632,7 +673,9 @@
               } catch (err) {
                   console.error("Virhe tietojen lähetyksessä:", err);
                   alert("Tietojen lähetyksessä tapahtui virhe. Yritä uudelleen myöhemmin.");
-              }
+                  // Piilota spinneri virhetilanteessa fade-out-animaatiolla
+                  document.getElementById("loading-overlay").classList.remove("visible");
+                }
           });
 
         } else {
@@ -642,6 +685,10 @@
         showSection(0);
     });
 </script>
+
+<div id="loading-overlay">
+  <div class="spinner"></div>
+</div>
 
 </body>
 </html>
