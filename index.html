@@ -7,7 +7,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
-
   <style>
 
     :root {
@@ -44,7 +43,13 @@
       padding: 0;
       background-color: transparent;
       color: var(--color-black);
-      overflow: hidden;
+      overflow-x: hidden; /* Estä vaakasuuntainen scrollaus */
+      /* Lisää seuraavat rivit Flexboxin käyttöön */
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh; /* Varmista, että body on vähintään näytön korkuinen */
+      justify-content: center; /* Keskittää sisällön pystysuunnassa */
+      align-items: center; /* Keskittää sisällön vaakasuunnassa */
     }
 
     /* Kortti */
