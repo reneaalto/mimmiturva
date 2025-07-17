@@ -415,7 +415,7 @@
 
     <label>
       <input type="checkbox" id="consent-checkbox" required>
-      Hyväksyn, että minulle lähetetään sähköpostitse ilmainen Mimmiturvasopas ja turvallisuuttasi parantavia uutisia. Voin peruuttaa tilauksen koska tahansa.
+      Hyväksyn, että minulle lähetetään sähköpostitse ilmainen Mimmiturvaopas ja turvallisuuttani parantavia uutisia. Voin peruuttaa tilauksen koska tahansa.
     </label>
 
     <p id="consent-error" class="error-msg">Täytä kaikki kentät ja hyväksy suostumus ennen jatkamista.</p>
@@ -518,7 +518,6 @@
             });
         });
 
-
         const finalSubmitQuestionBtn = document.getElementById("final-submit");
         if (finalSubmitQuestionBtn) {
             finalSubmitQuestionBtn.addEventListener("click", function () {
@@ -607,9 +606,9 @@
               }
 
               let index = 1; 
-              if (totalPoints >= 131 && totalPoints <= 200) index = 2;
-              else if (totalPoints >= 201 && totalPoints <= 400) index = 3;
-              else if (totalPoints >= 401) index = 4;
+              if (totalPoints >= 26 && totalPoints <= 125) index = 2;
+              else if (totalPoints >= 126 && totalPoints <= 250) index = 3;
+              else if (totalPoints >= 251) index = 4;
 
               const payload = {
                   firstname,
