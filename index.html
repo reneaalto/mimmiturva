@@ -284,20 +284,21 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: transparent; /* Pyyntösi mukaisesti transparent */
+      background-color: transparent; 
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       z-index: 9999;
       backdrop-filter: blur(4px);
-      transition: opacity 0.3s ease-in-out; /* Smooth fade in/out */
-      opacity: 0; /* Hidden by default */
-      pointer-events: none; /* Allows clicks through when hidden */
+      transition: opacity 0.3s ease-in-out; 
+      opacity: 0; 
+      pointer-events: none; 
     }
 
     #loading-overlay.visible {
       opacity: 1;
-      pointer-events: auto; /* Blocks clicks when visible */
+      pointer-events: auto; 
     }
 
     /* Spinner-animaatio */
@@ -305,7 +306,7 @@
       width: 48px;
       height: 48px;
       border: 6px solid #ccc;
-      border-top: 6px solid #e60023; /* Mimmiturva punainen */
+      border-top: 6px solid #e60023; 
       border-radius: 50%;
       animation: spin 1s ease-in-out infinite;
     }
@@ -315,56 +316,100 @@
       100% { transform: rotate(360deg); }
     }
 
-    /* Mobiililaitteiden optimointi */
-    @media (max-width: 768px) {
-      h1 {
-        font-size: clamp(1.2rem, 3.5vw, 1.8rem); 
-      }
-      h2 {
-        font-size: clamp(1.2rem, 5vw, 2rem); 
-        margin: 0 auto 1rem; 
-      }
-      h3 {
-        font-size: clamp(1.1rem, 3.5vw, 1.3rem); 
-      }
-      p {
-        font-size: 1rem;
-        line-height: 1.6rem;
-      }
-      label { 
-        font-size: 1rem;
-      }
-
-      
-      button {
-        padding: 0.8rem 1.8rem; 
-        font-size: clamp(1rem, 3vw, 1.2rem); 
-        line-height: 1.5rem; 
-        margin: 0.75rem auto; 
-      }
-
+      /* Always keep buttons side by side, spaced apart */
       .button-group {
-        flex-direction: column; 
-        gap: 1rem; 
-        max-width: 100%; 
-        margin: 1.5rem auto 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--gap-small);
+      max-width: 400px;
+      margin: 2rem auto 0 auto;
       }
+
       .button-group button {
-        width: 100%; 
+      width: auto;
+      min-width: 64px; /* Ensures buttons are easily tappable */
+      flex: 1 1 auto;
+      margin: 0;
+      justify-content: center;
+      text-align: center;
       }
 
-      input[type="text"],
-      input[type="email"] {
-        padding: 0.6rem 1rem; 
-        font-size: 1rem; 
+      .button-group .back-btn {
+      flex: 0 1 auto; /* Back button stays compact */
+      justify-content: flex-start;
       }
 
-      .section,
-      .question-section,
-      .result-section {
-        padding: 1rem; 
+      .answer-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      border: 3px solid #940500;
+      border-radius: 2.5rem;
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 1.2rem;
+      cursor: pointer;
+      font-size: 1.15rem;
+      font-family: var(--font-body);
+      font-weight: 700;
+      color: #1A1919;
+      transition: background 0.2s, color 0.2s, border 0.2s;
+      box-shadow: none;
+      min-height: 3.5rem;
       }
-    }
+
+      .answer-btn:hover,
+      .answer-btn:focus-within {
+      background: rgba(148, 5, 0, 0.10);
+      box-shadow:
+         0 0 0 8px rgba(26,25,25,0.08),
+         0 0 0 18px rgba(26,25,25,0.04),
+         0 0 32px 0 rgba(26,25,25,0.07),
+         0 0 64px 0 rgba(26,25,25,0.04);
+      border-color: #940500;
+      transition:
+         background 0.35s cubic-bezier(0.4,0,0.2,1),
+         box-shadow 0.35s cubic-bezier(0.4,0,0.2,1),
+         border 0.2s;
+      }
+
+      .answer-btn input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+      width: 0;
+      height: 0;
+      margin: 0;
+      }
+
+      .answer-btn:has(input[type="radio"]:checked) {
+      background: #940500;
+      color: #fff;
+      border: 2px solid #940500;
+      }
+
+      .answer-btn:has(input[type="radio"]:checked) span {
+      color: #fff;
+      }
+
+      .answer-btn span {
+      color: #1A1919;
+      width: 100%;
+      text-align: center;
+      font-weight: 700;
+      display: block;
+      }
+
+      /* Hide the radio input, but keep it accessible for screen readers and keyboard */
+      .answer-btn input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+      width: 0;
+      height: 0;
+      margin: 0;
+      }
 
     @media (max-width: 480px) { 
       h1 {
@@ -384,6 +429,40 @@
         padding: 0.7rem 1.5rem;
       }
     }
+
+      .loading-text {
+      margin-top: 2rem;
+      text-align: center;
+      color: #1A1919;
+      font-family: var(--font-body);
+      animation: fadeIn 0.7s ease;
+      }
+      .loading-text h3 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.3rem;
+      font-weight: 700;
+      }
+      .loading-text p {
+      margin: 0;
+      font-size: 1.05rem;
+      }
+      .loading-text p {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.3rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #940500, #e60023, #940500, #1A1919);
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+      animation: shimmer 2.2s linear infinite;
+      }
+
+      @keyframes shimmer {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+      }
 
 </style>
 </head>
@@ -408,11 +487,19 @@
   <div class="card">
     <h2>1. Entä jos jotain tapahtuisi?</h2>
     <i>Miten suhtaudut mahdollisiin turvallisuusuhkiin omassa tai läheistesi elämässä?</i>
-    <label style="margin-top: 0.75rem; display: inline-block;"></label>
     <form action="#" onsubmit="return false;">
-      <label><input type="radio" name="q1" value="2"> Ajattelen, että elämä kantaa, enkä juuri mieti uhkia ennalta. </label><br>
-      <label><input type="radio" name="q1" value="3"> Luotan siihen, että jos jotain tapahtuisi, selviäisimme kyllä siinä hetkessä. </label><br>
-      <label><input type="radio" name="q1" value="1"> Olen pohtinut mahdollisia uhkia ja tehnyt tietoisia valintoja niiden varalle. </label><br>
+      <label class="answer-btn">
+        <input type="radio" name="q1" value="2" />
+        <span>Ajattelen, että elämä kantaa, enkä juuri mieti uhkia ennalta.</span>
+      </label>
+      <label class="answer-btn">
+        <input type="radio" name="q1" value="3" />
+        <span>Luotan siihen, että jos jotain tapahtuisi, selviäisimme kyllä siinä hetkessä.</span>
+      </label>
+      <label class="answer-btn">
+        <input type="radio" name="q1" value="1" />
+        <span>Olen pohtinut mahdollisia uhkia ja tehnyt tietoisia valintoja niiden varalle.</span>
+      </label>
     </form>
     <button class="next-btn">Seuraava →</button>
     <p class="error-msg">Valitse yksi vastaus ennen kuin jatkat.</p>
@@ -425,12 +512,21 @@
     <h2>2. Voiko tieto tehdä sinusta vahvemman?</h2>
     <i>Miten koet turvallisuustiedon merkityksen arjessasi?</i>
     <form action="#" onsubmit="return false;">
-      <label><input type="radio" name="q2" value="3"> Ajattelen, että turvallisuus kuuluu viranomaisten vastuulle, eikä minun tarvitse perehtyä siihen sen syvemmin. </label><br>
-      <label><input type="radio" name="q2" value="2"> Koen, että liiallinen tieto voi aiheuttaa turhaa huolta tai ahdistusta. </label><br>
-      <label><input type="radio" name="q2" value="1"> Uskon, että tieto auttaa tekemään parempia päätöksiä ja ennakoimaan tilanteita. </label><br>
+      <label class="answer-btn">
+        <input type="radio" name="q2" value="3" />
+        <span>Ajattelen, että turvallisuus kuuluu viranomaisten vastuulle, eikä minun tarvitse perehtyä siihen sen syvemmin.</span>
+      </label>
+      <label class="answer-btn">
+        <input type="radio" name="q2" value="2" />
+        <span>Koen, että liiallinen tieto voi aiheuttaa turhaa huolta tai ahdistusta.</span>
+      </label>
+      <label class="answer-btn">
+        <input type="radio" name="q2" value="1" />
+        <span>Uskon, että tieto auttaa tekemään parempia päätöksiä ja ennakoimaan tilanteita.</span>
+      </label>
     </form>
     <div class="button-group">
-      <button class="back-btn">← Takaisin</button>
+      <button class="back-btn">← </button>
       <button class="next-btn">Seuraava →</button>
     </div>
     <p class="error-msg">Valitse yksi vastaus ennen kuin jatkat.</p>
@@ -443,12 +539,21 @@
     <h2>3. Miten elinympäristösi vaikuttaa turvallisuuteesi?</h2>
     <i>Miten arvioit ympäristösi vaikutusta turvallisuuteesi?</i>
     <form action="#" onsubmit="return false;">
-      <label><input type="radio" name="q3" value="2"> Tunnen oloni useimmiten turvalliseksi, enkä juuri mieti mahdollisia riskejä. </label><br>
-      <label><input type="radio" name="q3" value="1"> Tiedostan, että tietyt paikat tai tilanteet voivat vaatia erityistä valppautta. </label><br>
-      <label><input type="radio" name="q3" value="3"> Turvallisuudentunteeni vaihtelee uutisoinnin, ei ympäristön mukaan. </label><br>
+      <label class="answer-btn">
+        <input type="radio" name="q3" value="2" />
+        <span>Tunnen oloni useimmiten turvalliseksi, enkä juuri mieti mahdollisia riskejä.</span>
+      </label>
+      <label class="answer-btn">
+        <input type="radio" name="q3" value="1" />
+        <span>Tiedostan, että tietyt paikat tai tilanteet voivat vaatia erityistä valppautta.</span>
+      </label>
+      <label class="answer-btn">
+        <input type="radio" name="q3" value="3" />
+        <span>Turvallisuudentunteeni vaihtelee uutisoinnin, ei ympäristön mukaan.</span>
+      </label>
     </form>
     <div class="button-group">
-      <button class="back-btn">← Takaisin</button>
+      <button class="back-btn">← </button>
       <button class="next-btn">Seuraava →</button>
     </div>
     <p class="error-msg">Valitse yksi vastaus ennen kuin jatkat.</p>
@@ -457,16 +562,25 @@
 
 <!-- Kysymys 4 -->
 <section id="question-4" class="question-section" style="display: none;">
-  <div class="card"> 
+  <div class="card">
     <h2>4. Koetko pelkoa?</h2>
     <i>Millainen suhde sinulla on pelon tunteeseen ja mahdollisiin uhkiin?</i>
     <form action="#" onsubmit="return false;">
-      <label><input type="radio" name="q4" value="2"> Tunnen vähän pelkoa ja tunnistan riskejä, jotka voisivat uhata turvallisuuttani tai läheisiäni. </label><br>
-      <label><input type="radio" name="q4" value="3"> En tunne pelkoa enkä koe olevani vaarassa. </label><br>
-      <label><input type="radio" name="q4" value="1"> Tunnen pelkoa, mutta en osaa nimetä syytä tai uhkaa. </label><br>
+      <label class="answer-btn">
+        <input type="radio" name="q4" value="2" />
+        <span>Tunnen vähän pelkoa ja tunnistan riskejä, jotka voisivat uhata turvallisuuttani tai läheisiäni.</span>
+      </label>
+      <label class="answer-btn">
+        <input type="radio" name="q4" value="3" />
+        <span>En tunne pelkoa enkä koe olevani vaarassa.</span>
+      </label>
+      <label class="answer-btn">
+        <input type="radio" name="q4" value="1" />
+        <span>Tunnen pelkoa, mutta en osaa nimetä syytä tai uhkaa.</span>
+      </label>
     </form>
     <div class="button-group">
-      <button class="back-btn">← Takaisin</button>
+      <button class="back-btn">← </button>
       <button class="next-btn">Seuraava →</button>
     </div>
     <p class="error-msg">Valitse yksi vastaus ennen kuin jatkat.</p>
@@ -479,12 +593,21 @@
     <h2>5. Panostatko turvallisuuteen?</h2>
     <i>Miten suhtaudut siihen, että turvallisuus vaatii vähän aikaa, rahaa tai muita resursseja?</i>
     <form action="#" onsubmit="return false;">
-      <label><input type="radio" name="q5" value="2"> Tuntuu vaikealta käyttää resursseja johonkin, mikä ei ehkä koskaan tapahdu. </label><br>
-      <label><input type="radio" name="q5" value="3"> Toimin vasta sitten, jos jokin tilanne oikeasti vaatii sitä. </label><br>
-      <label><input type="radio" name="q5" value="1"> Näen turvallisuuteen panostamisen järkevänä ennakointina. </label><br>
+      <label class="answer-btn">
+        <input type="radio" name="q5" value="2" />
+        <span>Tuntuu vaikealta käyttää resursseja johonkin, mikä ei ehkä koskaan tapahdu.</span>
+      </label>
+      <label class="answer-btn">
+        <input type="radio" name="q5" value="3" />
+        <span>Toimin vasta sitten, jos jokin tilanne oikeasti vaatii sitä.</span>
+      </label>
+      <label class="answer-btn">
+        <input type="radio" name="q5" value="1" />
+        <span>Näen turvallisuuteen panostamisen järkevänä ennakointina.</span>
+      </label>
     </form>
     <div class="button-group">
-      <button class="back-btn">← Takaisin</button>
+      <button class="back-btn">← </button>
       <button class="next-btn">Seuraava →</button>
     </div>
     <p class="error-msg">Valitse yksi vastaus ennen kuin jatkat.</p>
@@ -497,12 +620,21 @@
     <h2>6. Kannatko vastuuta myös muiden turvallisuudesta?</h2>
     <i>Millainen rooli sinulla on läheistesi turvallisuuden tukemisessa?</i>
     <form action="#" onsubmit="return false;">
-      <label><input type="radio" name="q6" value="2"> Uskon, että jokainen vastaa itse omasta turvallisuudestaan. </label><br>
-      <label><input type="radio" name="q6" value="1"> Kannustan ja tuen heitä kehittämään omaa osaamistaan ja varautumistaan. </label><br>
-      <label><input type="radio" name="q6" value="3"> Yritän pitää heidät suojassa välttelemällä maalaamasta piruja seinille. </label><br>
+      <label class="answer-btn">
+        <input type="radio" name="q6" value="2" />
+        <span>Uskon, että jokainen vastaa itse omasta turvallisuudestaan.</span>
+      </label>
+      <label class="answer-btn">
+        <input type="radio" name="q6" value="1" />
+        <span>Kannustan ja tuen heitä kehittämään omaa osaamistaan ja varautumistaan.</span>
+      </label>
+      <label class="answer-btn">
+        <input type="radio" name="q6" value="3" />
+        <span>Yritän pitää heidät suojassa välttelemällä maalaamasta piruja seinille.</span>
+      </label>
     </form>
     <div class="button-group">
-      <button class="back-btn">← Takaisin</button>
+      <button class="back-btn">← </button>
       <button class="next-btn">Seuraava →</button>
     </div>
     <p class="error-msg">Valitse yksi vastaus ennen kuin jatkat.</p>
@@ -533,7 +665,7 @@
     <p id="consent-error" class="error-msg">Täytä kaikki kentät ja hyväksy suostumus ennen jatkamista.</p>
 
     <div class="button-group">
-      <button class="back-btn">← Takaisin</button>
+      <button class="back-btn">← </button>
       <button id="final-submit-btn">Lähetä</button>
     </div>
   </form>
@@ -743,7 +875,7 @@
                       body: JSON.stringify(payload)
                   });
 
-                  window.top.location.href = `https://mimmiturva.framer.website/indeksi/${index}`;
+                  window.top.location.href = `https://mimmiturva.fi/indeksi/${index}`;
               } catch (err) {
                   console.error("Virhe tietojen lähetyksessä:", err);
                   alert("Tietojen lähetyksessä tapahtui virhe. Yritä uudelleen myöhemmin.");
@@ -762,6 +894,10 @@
 
 <div id="loading-overlay">
   <div class="spinner"></div>
+  <div class="loading-text">
+      <h3>Kiitos vastauksestanne!</h3>
+      <p>Laskemme Mimmiturvaindeksiäsi. Opas lähetetään sähköpostiisi hetken ajan kuluttua.</p>
+  </div></div>
 </div>
 
 </body>
