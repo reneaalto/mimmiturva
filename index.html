@@ -33,7 +33,6 @@
     /* Estetään scrollaus */
     html, body {
       height: 100%;
-      overflow: hidden;
     }
     
     /* Layout: runko */
@@ -43,13 +42,7 @@
       padding: 0;
       background-color: transparent;
       color: var(--color-black);
-      overflow-x: hidden; /* Estä vaakasuuntainen scrollaus */
-      /* Lisää seuraavat rivit Flexboxin käyttöön */
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh; /* Varmista, että body on vähintään näytön korkuinen */
-      justify-content: center; /* Keskittää sisällön pystysuunnassa */
-      align-items: center; /* Keskittää sisällön vaakasuunnassa */
+      overflow-x: hidden; 
     }
 
     /* Kortti */
@@ -221,6 +214,7 @@
       width: 100%;
       max-width: 480px;
       margin: 0 auto;
+      box-sizing: border-box;
     }
 
     .question-section label:first-of-type {
@@ -411,24 +405,104 @@
       margin: 0;
       }
 
-    @media (max-width: 480px) { 
-      h1 {
-        font-size: clamp(1.1rem, 4vw, 1.6rem);
+      @media (max-width: 600px) {
+        .section,
+        .question-section,
+        .result-section {
+          padding: 0.7rem;
+          max-width: 100vw;
+        }
+        .card {
+          padding: 0;
+          margin: 0;
+          max-width: 100vw;
+        }
+        h1 { font-size: 1.3rem; }
+        h2 { font-size: 1.1rem; padding-bottom: 0.3rem; }
+        h3 { font-size: 1rem; }
+        p, label { font-size: 1rem; }
+        .answer-btn {
+          font-size: 1rem;
+          padding: 0.7rem 0.7rem;
+          margin-bottom: 0.7rem;
+          border-width: 2px;
+          min-height: 2.7rem;
+        }
+        button,
+        .button-group button {
+          font-size: 1rem;
+          padding: 0.6rem 1rem;
+          min-width: 48px;
+          min-height: 2.5rem;
+          margin: 0.5rem 0.2rem;
+        }
       }
-      h2 {
-        font-size: clamp(1.1rem, 5.5vw, 1.8rem);
+      
+      @media (max-width: 480px) {
+        .section,
+        .question-section,
+        .result-section {
+          padding: 0.4rem;
+          max-width: 100vw;
+        }
+        .card {
+          padding: 0;
+          margin: 0;
+          max-width: 100vw;
+        }
+        h1 { font-size: 1.1rem; }
+        h2 { font-size: 1rem; padding-bottom: 0.2rem; }
+        h3 { font-size: 0.95rem; }
+        p, label { font-size: 0.92rem; }
+        .answer-btn {
+          font-size: 0.95rem;
+          padding: 0.5rem 0.5rem;
+          margin-bottom: 0.5rem;
+          border-width: 2px;
+          min-height: 2.2rem;
+        }
+        button,
+        .button-group button {
+          font-size: 0.95rem;
+          padding: 0.5rem 0.7rem;
+          min-width: 44px;
+          min-height: 2.1rem;
+          margin: 0.3rem 0.1rem;
+        }
       }
-      h3 {
-        font-size: clamp(1rem, 4.5vw, 1.2rem);
+      
+      @media (max-width: 360px) {
+        .section,
+        .question-section,
+        .result-section {
+          padding: 0.2rem;
+          max-width: 100vw;
+        }
+        .card {
+          padding: 0;
+          margin: 0;
+          max-width: 100vw;
+        }
+        h1 { font-size: 0.95rem; }
+        h2 { font-size: 0.85rem; padding-bottom: 0.1rem; }
+        h3 { font-size: 0.8rem; }
+        p, label { font-size: 0.85rem; }
+        .answer-btn {
+          font-size: 0.85rem;
+          padding: 0.3rem 0.3rem;
+          margin-bottom: 0.3rem;
+          border-width: 1.5px;
+          min-height: 1.7rem;
+        }
+        button,
+        .button-group button {
+          font-size: 0.85rem;
+          padding: 0.3rem 0.4rem;
+          min-width: 36px;
+          min-height: 1.6rem;
+          margin: 0.1rem 0;
+        }
       }
-      p, label {
-        font-size: 0.95rem;
-      }
-      button {
-        font-size: 1rem;
-        padding: 0.7rem 1.5rem;
-      }
-    }
 
       .loading-text {
       margin-top: 2rem;
@@ -885,6 +959,7 @@
 
 </body>
 </html>
+
 
 
 
