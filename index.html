@@ -33,6 +33,7 @@
     /* Estetään scrollaus */
     html, body {
       height: 100%;
+      overflow: hidden;
     }
     
     /* Layout: runko */
@@ -42,7 +43,13 @@
       padding: 0;
       background-color: transparent;
       color: var(--color-black);
-      overflow-x: hidden; 
+      overflow-x: hidden; /* Estä vaakasuuntainen scrollaus */
+      /* Lisää seuraavat rivit Flexboxin käyttöön */
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh; /* Varmista, että body on vähintään näytön korkuinen */
+      justify-content: center; /* Keskittää sisällön pystysuunnassa */
+      align-items: center; /* Keskittää sisällön vaakasuunnassa */
     }
 
     /* Kortti */
@@ -214,7 +221,6 @@
       width: 100%;
       max-width: 480px;
       margin: 0 auto;
-      box-sizing: border-box;
     }
 
     .question-section label:first-of-type {
@@ -404,6 +410,25 @@
       height: 0;
       margin: 0;
       }
+
+    @media (max-width: 480px) { 
+      h1 {
+        font-size: clamp(1.1rem, 4vw, 1.6rem);
+      }
+      h2 {
+        font-size: clamp(1.1rem, 5.5vw, 1.8rem);
+      }
+      h3 {
+        font-size: clamp(1rem, 4.5vw, 1.2rem);
+      }
+      p, label {
+        font-size: 0.95rem;
+      }
+      button {
+        font-size: 1rem;
+        padding: 0.7rem 1.5rem;
+      }
+    }
 
       .loading-text {
       margin-top: 2rem;
@@ -860,8 +885,3 @@
 
 </body>
 </html>
-
-
-
-
-
