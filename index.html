@@ -450,6 +450,79 @@
       font-size: 1.05rem;
       }
 
+      .modal {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        overflow: auto;
+        overscroll-behavior: contain;
+      }
+      .modal.is-open {
+        display: flex;
+      }
+      .modal-backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba(0,0,0,0.45);
+      }
+      .modal-dialog {
+        position: relative;
+        z-index: 1;
+        background: #fff;
+        border-radius: 16px;
+        padding: 24px 24px 28px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+        max-width: 520px;
+        width: min(520px, calc(100% - 32px));
+      }
+      .modal-dialog h2 {
+        font-size: 1.35rem; 
+        margin-bottom: 0.75rem;
+      }
+      .modal-dialog p {
+        font-size: 0.95rem; 
+        line-height: 1.4;   
+        margin-bottom: 0.75rem;
+      }
+      .modal-close {
+        position: absolute;
+        top: 8px;
+        right: 10px;
+        border: 0;
+        background: transparent;
+        font-size: 28px;
+        line-height: 1;
+        cursor: pointer;
+        color: var(--color-red, #c1121f);
+        transition: transform 120ms ease, opacity 120ms ease;
+      }
+      .modal-close:hover {
+        transform: scale(1.06);
+        opacity: 0.85;
+        color: var(--color-light-gray, #f2f2f2);
+      }
+      .modal-hero img {
+        display: block;
+        width: 140px;
+        height: auto;
+        margin: 8px auto 12px;
+      }
+      .modal-list {
+        padding-left: 18px;
+        margin: 8px 0 12px;
+        font-size: 0.95rem; 
+        line-height: 1.4;
+      }
+      .modal-cta-note {
+        font-weight: 700;
+        margin-top: 8px;
+        text-align: center;
+        font-size: 0.95rem;
+      }
+
 </style>
 </head>
 <body>
@@ -631,14 +704,17 @@
 <section id="consent-section" class="section" style="display: none;">
   <div class="card">
   <h2>Melkein valmis!</h2>
-  <p>Anna sähköpostiosoitteesi ja nimesi, niin saat Mimmiturvaindeksisi välittömästi näkyviin ja <b>ilmaisen Mimmiturvaoppaan käyttöösi!</b></p>
+  <p>Syötä alle tietosi, niin saat Mimmiturvaindeksisi välittömästi katsottavaksi ja <b>Mimmiturvaoppaan ilmaiseksi sähköpostiisi!</b></p>
 
+  <p style="text-align:center; margin: 0 0 1rem;">
+    <a href="#" id="whatIsGuideLink" style="color: var(--color-red); text-decoration: underline;">
+      Mikä on Mimmiturvaopas?
+    </a>
+  </p>
+  
   <form id="consent-form" onsubmit="return false;">
     <label for="firstname">Etunimi:</label><br>
     <input type="text" id="firstname" name="firstname" required style="width: 100%; padding: 0.4rem; margin-bottom: 1rem;"><br>
-
-    <label for="lastname">Sukunimi:</label><br>
-    <input type="text" id="lastname" name="lastname" required style="width: 100%; padding: 0.4rem; margin-bottom: 1rem;"><br>
 
     <label for="email">Sähköposti:</label><br>
     <input type="email" id="email" name="email" required style="width: 100%; padding: 0.4rem; margin-bottom: 1rem;"><br>
@@ -652,12 +728,12 @@
 
     <div class="button-group">
       <button class="back-btn">← </button>
-      <button id="final-submit-btn">Lähetä</button>
+      <button id="final-submit-btn">Näytä tulokseni</button>
     </div>
     <p style="text-align:center; font-size:0.8rem; margin-top:0.5rem;">
     <a href="https://mimmiturva.fi/yksityisyydensuoja" target="_blank" style="color: var(--color-red); text-decoration: underline;">
     Tietosuojaseloste
-    </a>.
+    </a>
     </p>
   </form>
   </div>
@@ -793,22 +869,20 @@
               event.preventDefault(); 
               
               const firstnameInput = document.getElementById("firstname");
-              const lastnameInput = document.getElementById("lastname");
               const emailInput = document.getElementById("email");
               const consentCheckbox = document.getElementById("consent-checkbox");
               const consentErrorMsg = document.getElementById("consent-error");
 
-              if (!firstnameInput || !lastnameInput || !emailInput || !consentCheckbox || !consentErrorMsg) {
+              if (!firstnameInput || !emailInput || !consentCheckbox || !consentErrorMsg) {
                   console.error("Virhe: Yhteystietolomakkeen elementtejä puuttuu.");
                   return;
               }
 
               const firstname = firstnameInput.value.trim();
-              const lastname = lastnameInput.value.trim();
               const email = emailInput.value.trim();
               const consentChecked = consentCheckbox.checked;
 
-              if (!firstname || !lastname || !email || !consentChecked) {
+              if (!firstname || !email || !consentChecked) {
                   consentErrorMsg.classList.add("active");
                   return;
               } else {
@@ -850,7 +924,6 @@
 
               const payload = {
                   firstname,
-                  lastname,
                   email,
                   totalPoints,
                   index,
@@ -879,6 +952,44 @@
             console.warn("Varoitus: Lopullista lähetä-nappia (#final-submit-btn) ei löydy.");
         }
 
+        (function(){
+          const link = document.getElementById('whatIsGuideLink');
+          const modal = document.getElementById('guideModal');
+          if (!link || !modal) return;
+
+          const dialog = modal.querySelector('.modal-dialog');
+          const closeEls = modal.querySelectorAll('[data-close-modal]');
+          let lastActiveEl = null;
+
+          function openModal() {
+            lastActiveEl = document.activeElement;
+            modal.classList.add('is-open');
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+            dialog.focus();
+            document.addEventListener('keydown', onKeyDown);
+          }
+
+          function closeModal() {
+            modal.classList.remove('is-open');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+            document.removeEventListener('keydown', onKeyDown);
+            if (lastActiveEl) lastActiveEl.focus();
+          }
+
+          function onKeyDown(e) {
+            if (e.key === 'Escape') closeModal();
+          }
+
+          link.addEventListener('click', function(e){
+            e.preventDefault();
+            openModal();
+          });
+
+          closeEls.forEach(el => el.addEventListener('click', closeModal));
+        })();
+
         showSection(0);
     });
 </script>
@@ -891,6 +1002,35 @@
   </div></div>
 </div>
 
+<div id="guideModal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="guideModalTitle" aria-modal="true">
+  <div class="modal-backdrop" data-close-modal></div>
+  <div class="modal-dialog" role="document" tabindex="-1">
+    <button class="modal-close" aria-label="Sulje" data-close-modal>&times;</button>
+
+    <div class="modal-hero">
+      <img 
+        src="./Mimmiturvaopas%20kuva.png" 
+        alt="Mimmiturvaopas – kansikuva" 
+        style="max-width:140px; display:block; margin:8px auto 12px;"
+      >
+    </div>
+
+    <h2 id="guideModalTitle">Maksuton Mimmiturvaopas</h2>
+    <p>Mimmiturvaopas antaa sinulle käytännön keinot vähentää riskejä sekä toimia määrätietoisesti uhkaavissa tilanteissa – juhlissa, kadulla, treffeillä, julkisissa tiloissa, taksissa tai omassa kodissasi.</p>
+    <p><b>Opit muun muassa:</b></p>
+    <ul class="modal-list">
+      <li>tunnistamaan tilanteita ja ihmisiä, joihin liittyy riskejä.</li>
+      <li>suunnittelemaan kulkureittejä, tekemään havaintoja ja toimimaan määrätietoisesti.</li>
+      <li>puolustautumaan tarvittaessa – ja tiedät myös milloin kannattaa paeta.</li>
+      <li>toimimaan uhkatilanteessa, herättämään ihmisten huomion tehokkaasti ja käyttämään esineitä suojana.</li>
+    </ul>
+
+    <p class="modal-cta-note">
+      Turvallisuus ei synny toivomalla, vaan valmistautumalla.
+    </p>
+  </div>
+</div>
+
+
 </body>
 </html>
-
